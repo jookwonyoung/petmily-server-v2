@@ -11,7 +11,7 @@ import org.springframework.web.multipart.MultipartFile;
 import petmily.controller.dto.PostListResponseDto;
 import petmily.controller.dto.PostSaveRequestDto;
 import petmily.controller.dto.UserSaveRequestDto;
-import petmily.service.analysis.AnalysisService;
+//import petmily.service.analysis.AnalysisService;
 import petmily.service.like.LikeService;
 import petmily.service.post.PostService;
 import petmily.service.user.UserService;
@@ -30,7 +30,7 @@ public class PostApiController {
     private final UserService userService;
     private final PostService postService;
     private final LikeService likeService;
-    private final AnalysisService analysisService;
+    //private final AnalysisService analysisService;
 
     private String localPath = "/Users/jookwonyoung/Documents/petmily/testImg/post";
     private String ec2Path = "/home/ec2-user/petmilyServer/step1/imgDB/post";
@@ -69,53 +69,53 @@ public class PostApiController {
             returnMessage = "내부 서버 오류 - 파일 저장 실패";
         }
 
-        // 2. 파일 검사
-        String result = analysisService.detectAnimal(tmpPath);
-        System.out.println(result);
-        // Json to Object Mapper
-        ObjectMapper objectMapper = new ObjectMapper();
-        try {
-            JsonNode node = objectMapper.readTree(result);
-            String detected = node.get("detected").asText();
-            if (!detected.equals("false")) {
-
-
-                // 3. post 객체 생성, 저장
-                PostSaveRequestDto requestDto = new PostSaveRequestDto();
-                requestDto.setEmail(email);
-                requestDto.setPostContent(content);
-                if (detected.equals("dog")) {
-                    requestDto.setTags("강아지");
-                } else {
-                    requestDto.setTags("고양이");
-                }
-                Long postId = postService.save(requestDto);    //저장할 postImg(filename)
-
-                // 4. postImg 저장 - 로컬에 실제 이미지 저장
-                String filePath = postRootPath + "/" + postId;
-                Files.copy(tmpFile.toPath(), new File(filePath).toPath());
-                returnMessage = postId.toString();
-
-                // 5. 자동 태깅 실행 (비동기)
-                Thread thread = new Thread(new Runnable() {
-                    @Override
-                    public void run() {
-                        analysisService.autoTagging(postId, detected, filePath);
-                    }
-                });
-                thread.start();
-            } else {
-                returnMessage = "개나 고양이가 없는 사진입니다";
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-            returnMessage = "내부 서버 오류 - 파일 검사 실패: " + returnMessage;
-        } finally {
-            // 파일 삭제
-            if (!tmpFile.delete()) {
-                returnMessage = "내부 서버 오류 - 파일 삭제 실패";
-            }
-        }
+//        // 2. 파일 검사
+//        String result = analysisService.detectAnimal(tmpPath);
+//        System.out.println(result);
+//        // Json to Object Mapper
+//        ObjectMapper objectMapper = new ObjectMapper();
+//        try {
+//            JsonNode node = objectMapper.readTree(result);
+//            String detected = node.get("detected").asText();
+//            if (!detected.equals("false")) {
+//
+//
+//                // 3. post 객체 생성, 저장
+//                PostSaveRequestDto requestDto = new PostSaveRequestDto();
+//                requestDto.setEmail(email);
+//                requestDto.setPostContent(content);
+//                if (detected.equals("dog")) {
+//                    requestDto.setTags("강아지");
+//                } else {
+//                    requestDto.setTags("고양이");
+//                }
+//                Long postId = postService.save(requestDto);    //저장할 postImg(filename)
+//
+//                // 4. postImg 저장 - 로컬에 실제 이미지 저장
+//                String filePath = postRootPath + "/" + postId;
+//                Files.copy(tmpFile.toPath(), new File(filePath).toPath());
+//                returnMessage = postId.toString();
+//
+//                // 5. 자동 태깅 실행 (비동기)
+//                Thread thread = new Thread(new Runnable() {
+//                    @Override
+//                    public void run() {
+//                        analysisService.autoTagging(postId, detected, filePath);
+//                    }
+//                });
+//                thread.start();
+//            } else {
+//                returnMessage = "개나 고양이가 없는 사진입니다";
+//            }
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//            returnMessage = "내부 서버 오류 - 파일 검사 실패: " + returnMessage;
+//        } finally {
+//            // 파일 삭제
+//            if (!tmpFile.delete()) {
+//                returnMessage = "내부 서버 오류 - 파일 삭제 실패";
+//            }
+//        }
 
         return returnMessage;
     }
