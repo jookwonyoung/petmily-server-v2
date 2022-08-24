@@ -23,7 +23,7 @@ public class WalkImgListResponseDto {
 
     public WalkImgListResponseDto(Walk entity) {
 
-        String emailPath = "/home/ec2-user/petmilyServer/step1/imgDB/walk/" + entity.getEmail();
+        String emailPath = "/home/jooky/petmilyServer/step1/imgDB/walk/" + entity.getEmail();
 
         this.walkId = entity.getWalkId();
         this.email = entity.getEmail();

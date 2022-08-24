@@ -26,8 +26,8 @@ public class WalkApiController {
     private final UserService userService;
     private final WalkService walkService;
     String emailPath;       //walk/email 폴더
-    private final String localPath = "/Users/jookwonyoung/Documents/petmily/testImg/walk";
-    private final String ec2Path = "/home/ec2-user/petmilyServer/step1/imgDB/walk";
+    private final String localPath = "/Users/jookwonyoung/Documents/DB/petmily/testImg/walk";
+    private final String ubuntuPath = "/home/jooky/petmilyServer/step1/imgDB/walk";
 
     @PostMapping("/save")
     public Long save(@RequestHeader(value = "email") String email, @RequestParam("year") int year,
@@ -42,24 +42,17 @@ public class WalkApiController {
         saveRequestDto.setUserImg(userImg);
         Long userId = userService.save(saveRequestDto);
 
+
         // 1. walk 저장객체 생성, 저장
-        WalkSaveRequestDto requestDto = new WalkSaveRequestDto();
-        requestDto.setEmail(email);
-        requestDto.setYear(year);
-        requestDto.setMonth(month);
-        requestDto.setDay(day);
-        requestDto.setAvgSpeedInKMH(avgSpeedInKMH);
-        requestDto.setCaloriesBurned(caloriesBurned);
-        requestDto.setDistanceInMeters(distanceInMeters);
-        requestDto.setId(id);
-        requestDto.setTimeInMillis(timeInMillis);
+        WalkSaveRequestDto requestDto = new WalkSaveRequestDto(email, year, month, day, null, avgSpeedInKMH, distanceInMeters, timeInMillis, caloriesBurned, id);
         Long walkId = walkService.save(requestDto);
 
-        if (new File(ec2Path).exists()) {
-            emailPath = ec2Path + "/" + email;
+        if (new File(ubuntuPath).exists()) {
+            emailPath = ubuntuPath + "/" + email;
         } else {
             emailPath = localPath + "/" + email;
         }
+
 
         // 확장자 체크
         String conType = files.getContentType();
@@ -67,6 +60,7 @@ public class WalkApiController {
             Long error = null;
             return error;
         }
+
 
         // 2. 사용자 이메일 디렉토리 생성
         if (!new File(emailPath).exists()) {
@@ -76,6 +70,7 @@ public class WalkApiController {
                 e.getStackTrace();
             }
         }
+
 
         // 3. 산책 이미지 저장
         String filePath = emailPath + "/" + walkId;
