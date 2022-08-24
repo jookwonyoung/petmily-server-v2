@@ -21,15 +21,15 @@ public class PostListResponseDto {
 
     public PostListResponseDto(Post entity, String userImg) {
 
-        String ec2Path = "/home/ec2-user/petmilyServer/step1/imgDB/post";
-        String localPath = "/Users/jookwonyoung/Documents/petmily/testImg/post";
+        String ubuntuPath = "/home/jooky/petmilyServer/step1/imgDB/post";
+        String localPath = "/Users/jookwonyoung/Documents/DB/petmily/testImg/post";
 
         this.postId = entity.getPostId();
         this.email = entity.getEmail();
         try {
             InputStream in;
             try {
-                in = new FileInputStream(ec2Path + "/" + entity.getPostId());
+                in = new FileInputStream(ubuntuPath + "/" + entity.getPostId());
             } catch (IOException e) {
                 in = new FileInputStream(localPath + "/" + entity.getPostId());
             }

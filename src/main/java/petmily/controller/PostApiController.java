@@ -55,10 +55,9 @@ public class PostApiController {
         }
 
         //post 객체 생성, 저장
-        PostSaveRequestDto requestDto = new PostSaveRequestDto();
-        requestDto.setEmail(email);
-        requestDto.setPostContent(content);
+        PostSaveRequestDto requestDto = new PostSaveRequestDto(email, null, content, null);
         Long postId = postService.save(requestDto);     //저장할 postImg(filename)
+
 
 
         //postImg 저장 - 로컬에 실제 이미지 저장
