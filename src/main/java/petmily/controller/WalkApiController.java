@@ -25,9 +25,8 @@ public class WalkApiController {
 
     private final UserService userService;
     private final WalkService walkService;
-    String emailPath;       //walk/email 폴더
-    private final String localPath = "/Users/jookwonyoung/Documents/DB/petmily/testImg/walk";
-    private final String ubuntuPath = "/home/jooky/petmilyServer/step1/imgDB/walk";
+
+    private final ImgFileController imgFileController;
 
     @PostMapping("/save")
     public Long save(@RequestHeader(value = "email") String email, @RequestParam("year") int year,
@@ -43,42 +42,14 @@ public class WalkApiController {
         Long userId = userService.save(saveRequestDto);
 
 
-        // 1. walk 저장객체 생성, 저장
+        //walk 저장객체 생성, 저장
         WalkSaveRequestDto requestDto = new WalkSaveRequestDto(email, year, month, day, null, avgSpeedInKMH, distanceInMeters, timeInMillis, caloriesBurned, id);
         Long walkId = walkService.save(requestDto);
 
-        if (new File(ubuntuPath).exists()) {
-            emailPath = ubuntuPath + "/" + email;
-        } else {
-            emailPath = localPath + "/" + email;
-        }
 
+        //이미지파일 저장
+        imgFileController.fileSave("walk", files, walkId, email);
 
-        // 확장자 체크
-        String conType = files.getContentType();
-        if (!(conType.equals("image/png") || conType.equals("image/jpeg"))) {
-            Long error = null;
-            return error;
-        }
-
-
-        // 2. 사용자 이메일 디렉토리 생성
-        if (!new File(emailPath).exists()) {
-            try {
-                new File(emailPath).mkdir();
-            } catch (Exception e) {
-                e.getStackTrace();
-            }
-        }
-
-
-        // 3. 산책 이미지 저장
-        String filePath = emailPath + "/" + walkId;
-        try {
-            files.transferTo(new File(filePath));
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
 
         return walkId;
     }

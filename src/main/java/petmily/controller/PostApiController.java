@@ -27,20 +27,12 @@ public class PostApiController {
     private final PostService postService;
     private final LikeService likeService;
 
-    private String localPath = "/Users/jookwonyoung/Documents/DB/petmily/testImg/post";
-    private String ubuntuPath = "/home/jooky/petmilyServer/step1/imgDB/post";
-
-    String postRootPath;    //post 폴더
+    private final ImgFileController imgFileController;
 
     @PostMapping("/save")
     public String save(@RequestHeader(value = "email") String email, @RequestParam("userImg") String userImg, @RequestParam("postImg") MultipartFile files,
                        @RequestParam("postContent") String content) {
 
-        if (new File(ubuntuPath).exists()) {
-            postRootPath = ubuntuPath;        //ubuntu-server
-        } else {
-            postRootPath = localPath;     //localhost
-        }
 
         UserSaveRequestDto saveRequestDto = new UserSaveRequestDto();
         saveRequestDto.setEmail(email);
@@ -48,27 +40,13 @@ public class PostApiController {
         Long userId = userService.save(saveRequestDto);
 
 
-        // 확장자 체크
-        String conType = files.getContentType();
-        if (!(conType.equals("image/png") || conType.equals("image/jpeg"))) {
-            return "올바르지 않은 파일";
-        }
-
         //post 객체 생성, 저장
         PostSaveRequestDto requestDto = new PostSaveRequestDto(email, null, content, null);
         Long postId = postService.save(requestDto);     //저장할 postImg(filename)
 
 
-
-        //postImg 저장 - 로컬에 실제 이미지 저장
-        String filePath = postRootPath + "/" + postId;
-        File img = new File(filePath);
-        try {
-            files.transferTo(img);
-        }catch (Exception e) {
-            e.printStackTrace();
-            return "내부 서버 오류 - 파일 저장 실패";
-        }
+        //이미지파일 저장
+        imgFileController.fileSave("post", files, postId, email);
 
 
         return postId.toString();
@@ -79,9 +57,9 @@ public class PostApiController {
         InputStream in;
         try {
             try {
-                in = new FileInputStream(ubuntuPath + "/" + id);   //파일 읽어오기
+                in = new FileInputStream("/home/jooky/petmilyServer/step1/imgDB/post" + "/" + id);   //파일 읽어오기
             } catch (Exception e) {
-                in = new FileInputStream(localPath + "/" + id);   //파일 읽어오기
+                in = new FileInputStream("/Users/jookwonyoung/Documents/DB/petmily/testImg/post" + "/" + id);   //파일 읽어오기
             }
             byte[] imgByteArray = in.readAllBytes();                    //byte로 변환
             in.close();

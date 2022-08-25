@@ -23,7 +23,9 @@ public class WalkImgListResponseDto {
 
     public WalkImgListResponseDto(Walk entity) {
 
-        String emailPath = "/home/jooky/petmilyServer/step1/imgDB/walk/" + entity.getEmail();
+
+        String ubuntuEmailPath = "/home/jooky/petmilyServer/step1/imgDB/walk/" + entity.getEmail();
+        String localEmailPath = "/Users/jookwonyoung/Documents/DB/petmily/testImg/walk" + entity.getEmail();
 
         this.walkId = entity.getWalkId();
         this.email = entity.getEmail();
@@ -32,8 +34,11 @@ public class WalkImgListResponseDto {
         this.day = entity.getDay();
         try {
             InputStream in;
-
-            in = new FileInputStream(emailPath + "/" + entity.getWalkId());   //파일 읽어오기
+            try {
+                in = new FileInputStream(ubuntuEmailPath + "/" + entity.getWalkId());   //파일 읽어오기
+            }catch (IOException e) {
+                in = new FileInputStream(localEmailPath + "/" + entity.getWalkId());
+            }
             this.img = in.readAllBytes();
             in.close();
 
