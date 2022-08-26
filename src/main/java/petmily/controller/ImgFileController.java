@@ -19,9 +19,9 @@ public class ImgFileController {
 
         //환경 구분(맥, 우분투 && post, walk)
         if (new File(ubuntuPath).exists()) {
-            RootPath = ubuntuPath + "/" + path;        //ubuntu-server
+            RootPath = ubuntuPath + "/" + path;     //ubuntu-server
         } else {
-            RootPath = localPath+ "/" + path;     //localhost
+            RootPath = localPath+ "/" + path;       //localhost
         }
 
 
