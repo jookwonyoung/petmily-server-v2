@@ -46,10 +46,7 @@ public class PostApiController {
 
 
         //이미지파일 저장
-        imgFileController.fileSave("post", files, postId, email);
-
-
-        return postId.toString();
+        return imgFileController.fileSave("post", files, postId, email);
     }
 
     @GetMapping(value = "/getImg/{id}", produces = MediaType.IMAGE_JPEG_VALUE)

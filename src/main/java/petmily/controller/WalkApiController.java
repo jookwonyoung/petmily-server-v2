@@ -29,7 +29,7 @@ public class WalkApiController {
     private final ImgFileController imgFileController;
 
     @PostMapping("/save")
-    public Long save(@RequestHeader(value = "email") String email, @RequestParam("year") int year,
+    public String save(@RequestHeader(value = "email") String email, @RequestParam("year") int year,
                      @RequestParam("month") int month, @RequestParam("day") int day,
                      @RequestParam("img") MultipartFile files, @RequestParam("avgSpeedInKMH") float avgSpeedInKMH,
                      @RequestParam("distanceInMeters") int distanceInMeters, @RequestParam("timeInMillis") long timeInMillis,
@@ -48,10 +48,7 @@ public class WalkApiController {
 
 
         //이미지파일 저장
-        imgFileController.fileSave("walk", files, walkId, email);
-
-
-        return walkId;
+        return imgFileController.fileSave("walk", files, walkId, email);
     }
 
     @GetMapping("findAll")

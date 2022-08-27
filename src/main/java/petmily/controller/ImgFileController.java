@@ -56,7 +56,7 @@ public class ImgFileController {
         }
 
 
-        return "이미지 저장 성공";
+        return "이미지 저장 성공 " + path + "Id = " + fileId;
     }
 
 }
