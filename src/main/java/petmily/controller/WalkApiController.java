@@ -53,7 +53,7 @@ public class WalkApiController {
 
     @GetMapping("findAll")
     public List<WalkImgListResponseDto> findAll(@RequestHeader(value = "email") String email) {
-        return walkService.findAllDesc(email);
+        return walkService.findByEmail(email);
     }
 
     @GetMapping("/findByDate/{year}/{month}/{day}")

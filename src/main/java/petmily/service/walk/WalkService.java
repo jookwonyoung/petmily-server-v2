@@ -27,11 +27,20 @@ public class WalkService {
     }
 
     @Transactional(readOnly = true)
-    public List<WalkImgListResponseDto> findAllDesc(String email) {
-        return walkRepository.findAllDesc(email).stream()
+    public List<WalkImgListResponseDto> findAllDesc() {
+        return walkRepository.findAllDesc().stream()
                 .map(WalkImgListResponseDto::new)
                 .collect(Collectors.toList());
     }
+
+
+    @Transactional(readOnly = true)
+    public List<WalkImgListResponseDto> findByEmail(String email) {
+        return walkRepository.findByEmail(email).stream()
+                .map(WalkImgListResponseDto::new)
+                .collect(Collectors.toList());
+    }
+
 
     @Transactional(readOnly = true)
     public List<WalkImgListResponseDto> findDateDesc(int year, int month, int day, String email) {

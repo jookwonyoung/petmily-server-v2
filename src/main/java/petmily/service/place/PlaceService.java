@@ -21,6 +21,12 @@ public class PlaceService {
         return placeRepository.save(requestDto.toEntity()).getPlaceId();
     }
 
+    public List<PlaceListResponseDto> findAllDesc(){
+        return placeRepository.findAllDesc().stream()
+                .map(PlaceListResponseDto::new)
+                .collect(Collectors.toList());
+    }
+
     @Transactional(readOnly = true)
     public List<PlaceListResponseDto> findByEmail(String email) {
         return placeRepository.findByEmail(email).stream()
