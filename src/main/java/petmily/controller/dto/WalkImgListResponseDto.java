@@ -25,7 +25,7 @@ public class WalkImgListResponseDto {
 
 
         String ubuntuEmailPath = "/home/jooky/petmilyServer/step1/imgDB/walk/" + entity.getEmail();
-        String localEmailPath = "/Users/jookwonyoung/Documents/DB/petmily/testImg/walk" + entity.getEmail();
+        String localEmailPath = "/Users/jookwonyoung/Documents/DB/petmily/testImg/walk/" + entity.getEmail();
 
         this.walkId = entity.getWalkId();
         this.email = entity.getEmail();
